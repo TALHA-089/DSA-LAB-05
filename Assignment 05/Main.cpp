@@ -1,16 +1,19 @@
 #include "Functions.h"
 
+
 int main() {
     
     cout << "\n--------- Priority Queue ----------\n";
     int maxSize = getValidIntInput("\nEnter the Max Size for the Queue: ");
     PriorityQueue<string>* PQ = new PriorityQueue<string>(maxSize);
 
-    vector<string> Admins, Faculty, Students;
+    string* Admins = new string[maxSize];
+    string* Faculty = new string[maxSize];
+    string* Students = new string[maxSize];
+
     int AdminCounter = 0, FacultyCounter = 0, StudentCounter = 0;
     bool running = true;
 
-    
     while (running) {
         MainMenu();
         int choice = getValidIntInput("");
@@ -29,37 +32,50 @@ int main() {
 
                 switch (roleChoice) {
                 case 1:
-                    Admins.push_back("Admin" + to_string(++AdminCounter));
+                    if (AdminCounter < maxSize) {
+                        Admins[AdminCounter] = "Admin" + to_string(AdminCounter + 1);
+                        AdminCounter++;
+                    } else {
+                        cout << "Admin array is full!\n";
+                    }
                     break;
                 case 2:
-                    Faculty.push_back("Faculty" + to_string(++FacultyCounter));
+                    if (FacultyCounter < maxSize) {
+                        Faculty[FacultyCounter] = "Faculty" + to_string(FacultyCounter + 1);
+                        FacultyCounter++;
+                    } else {
+                        cout << "Faculty array is full!\n";
+                    }
                     break;
                 case 3:
-                    Students.push_back("Student" + to_string(++StudentCounter));
+                    if (StudentCounter < maxSize) {
+                        Students[StudentCounter] = "Student" + to_string(StudentCounter + 1);
+                        StudentCounter++;
+                    } else {
+                        cout << "Student array is full!\n";
+                    }
                     break;
                 }
             }
 
-
             int CounterSum = AdminCounter + FacultyCounter + StudentCounter;
             if (CounterSum > PQ->getSize()) {
                 cout << "\nQueue Overflow!\n";
-            }else {
-                for (int i = 0; i < Admins.size(); i++) {
+            } else {
+                for (int i = 0; i < AdminCounter; i++) {
                     PQ->insert(Admins[i]);
                 }
 
-                for (int i = 0; i < Faculty.size(); i++) {
+                for (int i = 0; i < FacultyCounter; i++) {
                     PQ->insert(Faculty[i]);
                 }
 
-                for (int i = 0; i < Students.size(); i++) {
+                for (int i = 0; i < StudentCounter; i++) {
                     PQ->insert(Students[i]);
                 }
 
                 cout << "\nItems inserted Successfully!\n";
             }
-
             break;
         }
 
@@ -67,10 +83,8 @@ int main() {
             if (PQ->isEmpty()) {
                 cout << "\nQueue is empty. No items to remove.\n";
             } else {
-                
                 int numToRemove = getValidIntInput("\nHow many items do you want to remove: ");
                 
-               
                 if (numToRemove > PQ->getSize()) {
                     cout << "\nYou cannot remove more items than are in the queue. Try again.\n";
                 } else {
@@ -97,6 +111,11 @@ int main() {
             break;
         }
     }
+
+    delete[] Admins;
+    delete[] Faculty;
+    delete[] Students;
     delete PQ;
+    
     return 0;
 }
